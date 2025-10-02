@@ -1,0 +1,20 @@
+{
+  "name": "smart-interview",
+  "version": "1.0.0",
+  "description": "AI-powered interview assistant",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "install-server": "npm install --prefix server",
+    "install-client": "npm install --prefix client",
+    "postinstall": "npm run install-server && npm run install-client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
