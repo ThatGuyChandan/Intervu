@@ -6,7 +6,7 @@ const ProgressBar = () => {
   const { questions, currentQuestionIndex } = useSelector(
     (state) => state.interview
   );
-  const percent = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const percent = Math.round(((currentQuestionIndex + 1) / questions.length) * 100);
 
   return <Progress percent={percent} />;
 };

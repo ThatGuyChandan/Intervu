@@ -8,7 +8,7 @@ const difficultyToTime = {
   Hard: 120,
 };
 
-const Timer = ({ onTimeout }) => {
+const Timer = ({ onTimeout, isRunning }) => {
   const dispatch = useDispatch();
   const { questions, currentQuestionIndex } = useSelector(
     (state) => state.interview
@@ -22,6 +22,8 @@ const Timer = ({ onTimeout }) => {
   }, [currentQuestionIndex, initialTime]);
 
   useEffect(() => {
+    if (!isRunning) return;
+
     if (timeLeft === 0) {
       onTimeout();
       return;
@@ -33,7 +35,7 @@ const Timer = ({ onTimeout }) => {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [timeLeft, dispatch, onTimeout]);
+  }, [timeLeft, dispatch, isRunning]);
 
   return <div>Time Left: {timeLeft}s</div>;
 };

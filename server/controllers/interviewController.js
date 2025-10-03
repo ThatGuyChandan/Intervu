@@ -41,15 +41,22 @@ exports.submitAnswer = async (req, res) => {
 
     // Ensure evaluation.score is a number
     const score = Number(evaluation.score);
-    candidate.questions[questionIndex].score = isNaN(score) ? 0 : score;
+    const newScore = isNaN(score) ? 0 : score;
 
-    candidate.questions[questionIndex].answer = answer;
-    candidate.questions[questionIndex].feedback = evaluation.feedback;
+    const updatedQuestions = candidate.questions.map((q, index) => {
+      if (index === questionIndex) {
+        return { ...q, answer, score: newScore, feedback: evaluation.feedback };
+      }
+      return q;
+    });
+
+    candidate.questions = updatedQuestions;
 
     if (questionIndex === candidate.questions.length - 1) {
-      const totalScore = candidate.questions.reduce((acc, q) => acc + q.score, 0);
+      const totalScore = candidate.questions.reduce((acc, q) => acc + (q.score ?? 0), 0);
+      candidate.totalScore = totalScore;
       if (candidate.questions.length > 0) {
-        candidate.finalScore = totalScore / candidate.questions.length;
+        candidate.finalScore = Math.round((totalScore / (candidate.questions.length * 10)) * 100);
       } else {
         candidate.finalScore = 0;
       }

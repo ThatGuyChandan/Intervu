@@ -25,6 +25,9 @@ const CandidateSchema = new mongoose.Schema({
   finalScore: {
     type: Number,
   },
+  totalScore: {
+    type: Number,
+  },
   summary: {
     type: String,
   },

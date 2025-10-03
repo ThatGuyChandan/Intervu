@@ -8,58 +8,85 @@ const extractJsonFromMarkdown = (text) => {
 };
 
 const generateQuestions = async (resumeText) => {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-  const prompt = `Based on the following resume, generate 6 interview questions (2 easy, 2 medium, 2 hard). Return the questions in a JSON array of objects, where each object has a "question" and "difficulty" field (Easy, Medium, or Hard).
+    const prompt = `Based on the following resume, generate 6 interview questions (2 easy, 2 medium, 2 hard). Return the questions in a JSON array of objects, where each object has a "question" and "difficulty" field (Easy, Medium, or Hard).
 
 Resume:
 ${resumeText}`;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = await response.text();
-  const cleanedText = extractJsonFromMarkdown(text);
-  return JSON.parse(cleanedText);
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
+    const cleanedText = extractJsonFromMarkdown(text);
+    return JSON.parse(cleanedText);
+  } catch (error) {
+    if (error.status === 429) {
+      throw new Error('You have exceeded your API quota. Please check your plan and billing details.');
+    }
+    throw error;
+  }
 };
 
 const evaluateAnswer = async (question, answer) => {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-  const prompt = `Evaluate the following answer to the interview question. Provide a score from 0 to 10 and brief feedback. Return the result as a JSON object with "score" and "feedback" fields.
+    const prompt = `Evaluate the following answer to the interview question. Provide a score from 0 to 10 and brief feedback. Return the result as a JSON object with "score" and "feedback" fields.
 
 Question: ${question}
 Answer: ${answer}`;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = await response.text();
-  const cleanedText = extractJsonFromMarkdown(text);
-  return JSON.parse(cleanedText);
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
+    const cleanedText = extractJsonFromMarkdown(text);
+    return JSON.parse(cleanedText);
+  } catch (error) {
+    if (error.status === 429) {
+      throw new Error('You have exceeded your API quota. Please check your plan and billing details.');
+    }
+    throw error;
+  }
 };
 
 const generateSummary = async (candidate) => {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-  const prompt = `Based on the following interview data, generate a summary of the candidate's performance. The data includes the questions, answers, scores, and feedback.
+    const prompt = `Based on the following interview data, generate a concise and structured summary of the candidate's performance. The summary should be professional and easy to read.
 
-Candidate Name: ${candidate.name}
-Resume Text: ${candidate.resumeText}
+    The summary should include the following sections:
+    - **Overall Performance:** A brief, one-sentence overview of the candidate's performance.
+    - **Strengths:** A bulleted list of 2-3 key strengths.
+    - **Areas for Improvement:** A bulleted list of 2-3 key areas for improvement.
+    - **Conclusion:** A brief, one-sentence concluding statement about the candidate's suitability for the role.
 
-Interview Performance:
-${candidate.questions
-  .map(
-    (q) =>
-      `Question: ${q.question}\nAnswer: ${q.answer}\nScore: ${q.score}\nFeedback: ${q.feedback}`
-  )
-  .join("\n\n")}
+    Candidate Name: ${candidate.name}
+    Resume Text: ${candidate.resumeText}
 
-Final Score: ${candidate.finalScore}
+    Interview Performance:
+    ${candidate.questions
+      .map(
+        (q) =>
+          `Question: ${q.question}\nAnswer: ${q.answer}\nScore: ${q.score ?? 0}\nFeedback: ${q.feedback}`
+      )
+      .join("\n\n")}
 
-Summary:`;
+    Final Score: ${candidate.finalScore}
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  return response.text();
+    Summary:`
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    if (error.status === 429) {
+      throw new Error('You have exceeded your API quota. Please check your plan and billing details.');
+    }
+    throw error;
+  }
 };
 
 module.exports = { generateQuestions, evaluateAnswer, generateSummary };

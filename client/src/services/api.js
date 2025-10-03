@@ -23,3 +23,8 @@ export const submitAnswer = async (candidateId, questionIndex, answer) => {
   });
   return response.data;
 };
+
+export const updateCandidate = async (candidateId, data) => {
+  const response = await axios.put(`${API_URL}/candidates/${candidateId}`, data);
+  return response.data;
+};

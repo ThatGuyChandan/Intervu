@@ -16,11 +16,14 @@ const CandidateDetail = ({ open, onCancel, candidateId }) => {
     }
   }, [dispatch, candidateId]);
 
-  const getScoreColor = (score) => {
-    if (score >= 8) return 'green';
-    if (score >= 5) return 'orange';
+  const getScoreColor = (score, max) => {
+    const percentage = (score / max) * 100;
+    if (percentage >= 80) return 'green';
+    if (percentage >= 50) return 'orange';
     return 'red';
   };
+
+  const maxScore = selectedCandidate?.questions.length * 10;
 
   return (
     <Modal
@@ -47,9 +50,12 @@ const CandidateDetail = ({ open, onCancel, candidateId }) => {
                   <Descriptions.Item label="Phone">
                     {selectedCandidate.phone}
                   </Descriptions.Item>
+                  <Descriptions.Item label="Total Score">
+                    {selectedCandidate.totalScore} / {maxScore}
+                  </Descriptions.Item>
                   <Descriptions.Item label="Final Score">
-                    <Tag color={getScoreColor(selectedCandidate.finalScore)}>
-                      {selectedCandidate.finalScore?.toFixed(2)}
+                    <Tag color={getScoreColor(selectedCandidate.finalScore, 100)}>
+                      {selectedCandidate.finalScore?.toFixed(2)}%
                     </Tag>
                   </Descriptions.Item>
                 </Descriptions>
@@ -71,8 +77,8 @@ const CandidateDetail = ({ open, onCancel, candidateId }) => {
                           <p className="question">{item.question}</p>
                           <p className="answer">{item.answer}</p>
                           <div className="feedback">
-                            <Tag color={getScoreColor(item.score)}>
-                              Score: {item.score}
+                            <Tag color={getScoreColor(item.score, 10)}>
+                              Score: {item.score} / 10
                             </Tag>
                             <p>{item.feedback}</p>
                           </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, Input, Card, Button } from 'antd';
+import { Table, Input, Card, Button, Tooltip } from 'antd';
 import { fetchCandidates } from '../features/candidates/candidatesSlice';
 import './CandidateTable.css';
 
@@ -42,12 +42,17 @@ const CandidateTable = ({ onViewDetails }) => {
       dataIndex: 'finalScore',
       key: 'finalScore',
       sorter: (a, b) => a.finalScore - b.finalScore,
+      render: (score) => `${score}%`,
     },
     {
       title: 'Summary',
       dataIndex: 'summary',
       key: 'summary',
-      ellipsis: true,
+      render: (text) => (
+        <Tooltip title={text}>
+          <span>{text?.substring(0, 100)}...</span>
+        </Tooltip>
+      ),
     },
     {
       title: 'Action',
