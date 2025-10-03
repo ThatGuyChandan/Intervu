@@ -3,7 +3,7 @@ const {
   generateQuestions,
   evaluateAnswer,
   generateSummary,
-} = require('../utils/openai');
+} = require('../utils/gemini');
 
 exports.startInterview = async (req, res) => {
   try {
@@ -39,13 +39,20 @@ exports.submitAnswer = async (req, res) => {
 
     const evaluation = await evaluateAnswer(question.question, answer);
 
+    // Ensure evaluation.score is a number
+    const score = Number(evaluation.score);
+    candidate.questions[questionIndex].score = isNaN(score) ? 0 : score;
+
     candidate.questions[questionIndex].answer = answer;
-    candidate.questions[questionIndex].score = evaluation.score;
     candidate.questions[questionIndex].feedback = evaluation.feedback;
 
     if (questionIndex === candidate.questions.length - 1) {
       const totalScore = candidate.questions.reduce((acc, q) => acc + q.score, 0);
-      candidate.finalScore = totalScore / candidate.questions.length;
+      if (candidate.questions.length > 0) {
+        candidate.finalScore = totalScore / candidate.questions.length;
+      } else {
+        candidate.finalScore = 0;
+      }
       const summary = await generateSummary(candidate);
       candidate.summary = summary;
     }

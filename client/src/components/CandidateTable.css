@@ -1,0 +1,4 @@
+.candidate-table .ant-table-tbody > tr:hover {
+  background-color: #f0f2f5;
+  cursor: pointer;
+}

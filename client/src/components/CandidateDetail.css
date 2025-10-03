@@ -1,0 +1,43 @@
+.candidate-detail-container {
+  padding: 24px;
+}
+
+.qa-list-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 16px; /* Add some space for the scrollbar */
+}
+
+.qa-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.qa-item .question,
+.qa-item .answer,
+.qa-item .feedback p {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.qa-item .question {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.qa-item .answer {
+  padding-left: 16px;
+}
+
+.qa-item .feedback {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #f0f2f5;
+  border-radius: 8px;
+}
+
+.qa-item .feedback .ant-tag {
+  margin-bottom: 8px;
+}

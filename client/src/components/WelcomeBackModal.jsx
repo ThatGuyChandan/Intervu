@@ -3,7 +3,7 @@ import { Modal, Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import { resetInterview } from '../features/interview/interviewSlice';
 
-const WelcomeBackModal = ({ visible, onContinue, onRestart }) => {
+const WelcomeBackModal = ({ open, onContinue, onRestart }) => {
   const dispatch = useDispatch();
 
   const handleRestart = () => {
@@ -14,7 +14,7 @@ const WelcomeBackModal = ({ visible, onContinue, onRestart }) => {
   return (
     <Modal
       title="Welcome Back!"
-      visible={visible}
+      open={open}
       footer={[
         <Button key="restart" onClick={handleRestart}>
           Restart Interview

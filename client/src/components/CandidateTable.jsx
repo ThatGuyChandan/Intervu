@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, Input, Card } from 'antd';
+import { Table, Input, Card, Button } from 'antd';
 import { fetchCandidates } from '../features/candidates/candidatesSlice';
+import './CandidateTable.css';
 
 const { Search } = Input;
 
-const CandidateTable = ({ onSelectCandidate }) => {
+const CandidateTable = ({ onViewDetails }) => {
   const dispatch = useDispatch();
   const { list: candidates, loading } = useSelector((state) => state.candidates);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
@@ -48,6 +49,15 @@ const CandidateTable = ({ onSelectCandidate }) => {
       key: 'summary',
       ellipsis: true,
     },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => (
+        <Button type="primary" onClick={() => onViewDetails(record._id)}>
+          View Details
+        </Button>
+      ),
+    },
   ];
 
   return (
@@ -58,12 +68,13 @@ const CandidateTable = ({ onSelectCandidate }) => {
         style={{ width: 200, marginBottom: 16 }}
       />
       <Table
+        className="candidate-table"
         dataSource={filteredCandidates}
         columns={columns}
         loading={loading}
         rowKey="_id"
         onRow={(record) => ({
-          onClick: () => onSelectCandidate(record._id),
+          onClick: () => onViewDetails(record._id),
         })}
         scroll={{ x: true }}
       />
