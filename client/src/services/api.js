@@ -28,3 +28,13 @@ export const updateCandidate = async (candidateId, data) => {
   const response = await axios.put(`${API_URL}/candidates/${candidateId}`, data);
   return response.data;
 };
+
+export const fetchCandidates = async () => {
+  const response = await axios.get(`${API_URL}/candidates`);
+  return response.data;
+};
+
+export const fetchCandidateById = async (id) => {
+  const response = await axios.get(`${API_URL}/candidates/${id}`);
+  return response.data;
+};

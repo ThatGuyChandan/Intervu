@@ -1,21 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/api';
+import { fetchCandidates as fetchCandidatesAPI, fetchCandidateById as fetchCandidateByIdAPI } from '../services/api';
 
 export const fetchCandidates = createAsyncThunk(
   'candidates/fetchAll',
   async () => {
-    const response = await axios.get(`${API_URL}/candidates`);
-    return response.data;
+    const response = await fetchCandidatesAPI();
+    return response;
   }
 );
 
 export const fetchCandidateById = createAsyncThunk(
   'candidates/fetchById',
   async (id) => {
-    const response = await axios.get(`${API_URL}/candidates/${id}`);
-    return response.data;
+    const response = await fetchCandidateByIdAPI(id);
+    return response;
   }
 );
 
