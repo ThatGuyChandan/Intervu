@@ -15,7 +15,7 @@ AI-powered interview assistant that generates questions based on a candidate's r
 ## Tech Stack
 
 - **Frontend:** React, Redux, Ant Design
-- **Backend:** Node.js, Express, MongoDB, Mongoose
+- **Backend:** Node.js,, Express, MongoDB, Mongoose
 - **AI:** Google Gemini API
 
 ## Architecture
@@ -93,6 +93,16 @@ sequenceDiagram
      PORT=5000
      MONGODB_URI=<your_mongodb_connection_string>
      GEMINI_API_KEY=<your_gemini_api_key>
+     CLIENT_URL=http://localhost:3000
+     ```
+
+2. **Set up frontend environment variables:**
+
+   - Create a `.env` file in the `/client` directory.
+   - Add the following variable:
+
+     ```
+     VITE_API_URL=http://localhost:5000/api
      ```
 
 ### Running the Application
