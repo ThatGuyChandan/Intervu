@@ -7,7 +7,7 @@ import Timer from '../components/Timer';
 import ProgressBar from '../components/ProgressBar';
 import SummaryModal from '../components/SummaryModal';
 import { submitAnswer as submitAnswerAPI } from '../services/api';
-import { nextQuestion, setAnswer, resetInterview } from '../features/interview/interviewSlice';
+import { nextQuestion, setAnswer, setInterviewResult, resetInterview } from '../features/interview/interviewSlice';
 
 const InterviewPage = () => {
   const [loading, setLoading] = useState(false);
@@ -38,14 +38,20 @@ const InterviewPage = () => {
     setLoading(true);
     try {
       dispatch(setAnswer({ questionIndex: currentQuestionIndex, answer }));
-      await submitAnswerAPI(candidateId, currentQuestionIndex, answer);
+      const data = await submitAnswerAPI(candidateId, currentQuestionIndex, answer);
       if (currentQuestionIndex < questions.length - 1) {
         dispatch(nextQuestion());
       } else {
+        dispatch(setInterviewResult(data));
+        dispatch(nextQuestion()); // Move to the end of the questions array
         setIsSummaryModalVisible(true);
       }
     } catch (error) {
-      message.error('Failed to submit answer. Please try again.');
+      if (error.response && error.response.status === 429) {
+        message.error('We have reached our request limit. Please try again after some time.');
+      } else {
+        message.error('Failed to submit answer. Please try again.');
+      }
     }
     setLoading(false);
     isSubmitting.current = false;

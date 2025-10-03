@@ -7,6 +7,8 @@ const initialState = {
   answers: [],
   timer: 0,
   interviewStarted: false,
+  finalScore: 0,
+  summary: '',
 };
 
 const interviewSlice = createSlice({
@@ -27,6 +29,10 @@ const interviewSlice = createSlice({
     setTimer: (state, action) => {
       state.timer = action.payload;
     },
+    setInterviewResult: (state, action) => {
+      state.finalScore = action.payload.finalScore;
+      state.summary = action.payload.summary;
+    },
     resetInterview: (state) => {
       Object.assign(state, initialState);
     },
@@ -38,6 +44,7 @@ export const {
   nextQuestion,
   setAnswer,
   setTimer,
+  setInterviewResult,
   resetInterview,
 } = interviewSlice.actions;
 

@@ -55,9 +55,9 @@ const generateSummary = async (candidate) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    const prompt = `Based on the following interview data, generate a concise and structured summary of the candidate's performance. The summary should be professional and easy to read.
+    const prompt = `Generate a concise and structured summary of the candidate's performance based on the following interview data. Do not include any introductory phrases or preamble.
 
-    The summary should include the following sections:
+    The summary must include the following sections:
     - **Overall Performance:** A brief, one-sentence overview of the candidate's performance.
     - **Strengths:** A bulleted list of 2-3 key strengths.
     - **Areas for Improvement:** A bulleted list of 2-3 key areas for improvement.

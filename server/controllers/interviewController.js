@@ -62,6 +62,8 @@ exports.submitAnswer = async (req, res) => {
       }
       const summary = await generateSummary(candidate);
       candidate.summary = summary;
+      await candidate.save();
+      return res.json(candidate);
     }
 
     await candidate.save();
@@ -69,6 +71,9 @@ exports.submitAnswer = async (req, res) => {
     res.json({ evaluation });
   } catch (error) {
     console.error(error);
+    if (error.message.includes('API quota')) {
+      return res.status(429).json({ message: error.message });
+    }
     res.status(500).json({ message: 'Server error' });
   }
 };
