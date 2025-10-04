@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchCandidates as fetchCandidatesAPI, fetchCandidateById as fetchCandidateByIdAPI } from '../services/api';
+import { fetchCandidates as fetchCandidatesAPI, fetchCandidateById as fetchCandidateByIdAPI } from '../../services/api';
 
 export const fetchCandidates = createAsyncThunk(
   'candidates/fetchAll',
